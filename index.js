@@ -1,4 +1,4 @@
-require("dotenv").config();
+// require("dotenv").config(); // Removed for deployment on railway
 const express = require("express");
 const OpenAI = require("openai");
 const client = new OpenAI({
