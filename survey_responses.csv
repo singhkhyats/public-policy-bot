@@ -1,6 +1,0 @@
-sessionID,timestamp,completion_status,age,gender,nationality,q1_raw,q2_raw,q3_raw
-"f19b11-20d-c5c-9a1-7e8d4fa89","2026-04-08T00:49:47.455Z","complete","34","female","India","weekdays","generally reliable","way too expensive"
-"c5cb67-63f-d31-a3c-fc7a60718","2026-04-08T00:54:32.321Z","partial","37","male","India","sometimes","",""
-"ade59c-cc5-854-466-81041aa2c","2026-04-08T01:48:05.310Z","complete","23","female","China","only weekends","pretty satisfied","it's relatively cheap"
-"c68a49-f42-342-544-282a81c48","2026-04-08T01:49:12.593Z","complete","35","femme","Inde","seulement les weekends","trop mal","je trouve que c'est trop cher"
-"4d9064-ab8-bfb-55a-3e4dfd630","2026-04-08T01:54:58.056Z","partial","fr","38","homme","Chine","","",""
