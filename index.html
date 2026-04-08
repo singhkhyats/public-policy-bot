@@ -5,21 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Public Policy Survey</title>
   <link rel="stylesheet" href="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/themes/df-messenger-default.css">
-</head>
-<body>
-  <df-messenger
-    location="northamerica-northeast1"
-    project-id="public-policy-chatbot"
-    agent-id="20c6fb51-3364-4ecd-9fe2-73203361287a"
-    language-code="en"
-    max-query-length="-1">
-    <df-messenger-chat
-      chat-title="SurveyBot">
-    </df-messenger-chat>
-  </df-messenger>
-
-  <script src="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/df-messenger.js"></script>
-
   <style>
     df-messenger {
       z-index: 999;
@@ -35,5 +20,18 @@
       width: 350px;
     }
   </style>
+</head>
+<body>
+  <df-messenger
+    location="northamerica-northeast1"
+    project-id="public-policy-chatbot"
+    agent-id="20c6fb51-3364-4ecd-9fe2-73203361287a"
+    language-code="en"
+    max-query-length="-1">
+    <df-messenger-chat
+      chat-title="SurveyBot">
+    </df-messenger-chat>
+  </df-messenger>
+  <script src="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/df-messenger.js"></script>
 </body>
 </html>
