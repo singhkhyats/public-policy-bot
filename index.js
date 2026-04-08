@@ -172,34 +172,6 @@ app.post("/webhook", async (req, res) => {
         return res.status(200).send("OK");
     } else if (tag in targetPages) {
         return await handleQuestionTag(tag, sessionId, params, rawText, lang, res);
-
-    // } else if (tag === "q1_answer") {
-        // if (looksLikeQuestion(rawText)) {
-        //   const answer = await getGeneratedResponse(rawText);
-        //   const qKey = Object.keys(prompts).find(k => page.includes(k));
-        //   const promptQ = qKey ? prompts[qKey] : "When you're ready, please answer the question.";
-        //   const reprompt = `Going back to the survey... ${promptQ}`;
-
-        //   return res.status(200).json({
-        //     fulfillment_response: {
-        //       messages: [
-        //         { text: { text: [answer] } },
-        //         { text: { text: [reprompt] } }
-        //       ]
-        //     },
-        //     sessionInfo: {
-        //       parameters: { q1_answered: false }
-        //     }
-        //   });
-        // }
-        // handleQ1(sessionId, params, rawText);
-        // console.log("Setting q1_answered = true");
-        // return res.status(200).json({
-        //   sessionInfo: {
-        //     parameters: { q1_answered: true }
-        //   },
-        //   targetPage: "projects/public-policy-chatbot/locations/northamerica-northeast1/agents/20c6fb51-3364-4ecd-9fe2-73203361287a/flows/f7e22aeb-3ff8-4798-a26c-77f345b9566c/pages/8f9d1e08-1079-45d9-a516-9afb94da49e8"
-        // });
     }
 
     if (page.includes("Demographics 1")) {
@@ -272,33 +244,3 @@ function handleNationality(sessionId, params) {
   sessions[sessionId].nationality = params.nationality;
   console.log("Nationality:", params.nationality);
 }
-
-// function handleQ1(sessionId, params, rawText) {
-//   console.log("Q1 Raw:", rawText);
-//   ensureSession(sessionId);
-//   sessions[sessionId].q1_raw = rawText;
-// //   sessions[sessionId].q1_transit_frequency = params.q1_transit_frequency;
-// }
-
-// function handleQ2(sessionId, params, rawText) {
-//   console.log("Q2 Reliability:", params.q2_reliability);
-//   console.log("Q2 Raw:", rawText);
-//   ensureSession(sessionId);
-//   sessions[sessionId].q2_raw = rawText;
-// //   sessions[sessionId].q2_reliability = params.q2_reliability;
-
-// }
-
-// function handleQ3(sessionId, params, rawText) {
-//   console.log("Q3 Raw:", rawText);
-//   ensureSession(sessionId);
-//   sessions[sessionId].q3_raw = rawText;
-
-//   // saveSessionToCSV(sessionId); // assumes q3 is the last question. change this !!
-// }
-
-
-
-
-// Need to handle webhook logic if user quits session early
-
