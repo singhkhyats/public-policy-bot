@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -32,5 +32,142 @@
     </df-messenger-chat>
   </df-messenger>
   <script src="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/df-messenger.js"></script>
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Public Policy Survey</title>
+  <link rel="stylesheet" href="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/themes/df-messenger-default.css">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: Google Sans, sans-serif;
+      background: #f3f6fc;
+      display: flex;
+      height: 100vh;
+    }
+
+    #landing {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 60px;
+      max-width: calc(100% - 350px);
+    }
+
+    #landing h1 {
+      font-size: 2rem;
+      color: #1a73e8;
+      margin-bottom: 16px;
+    }
+
+    #landing p {
+      font-size: 1rem;
+      color: #444;
+      line-height: 1.7;
+      max-width: 520px;
+      margin-bottom: 12px;
+    }
+
+    #landing .tag {
+      display: inline-block;
+      background: #d3e3fd;
+      color: #1a73e8;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      margin-bottom: 24px;
+    }
+
+    #landing .lang-selector {
+      margin-top: 32px;
+    }
+
+    #landing .lang-selector label {
+      font-size: 0.9rem;
+      color: #666;
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    #landing select {
+      padding: 10px 16px;
+      font-size: 1rem;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      cursor: pointer;
+      background: white;
+      color: #333;
+    }
+
+    df-messenger {
+      z-index: 999;
+      position: fixed;
+      --df-messenger-font-color: #000;
+      --df-messenger-font-family: Google Sans;
+      --df-messenger-chat-background: #f3f6fc;
+      --df-messenger-message-user-background: #d3e3fd;
+      --df-messenger-message-bot-background: #fff;
+      bottom: 0;
+      right: 0;
+      top: 0;
+      width: 350px;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="landing">
+    <span class="tag">Pilot Study — Montreal, QC</span>
+    <h1>Public Policy Survey</h1>
+    <p>
+      Welcome! This survey collects your opinions on public services in Montreal, 
+      including the STM transit system and Hydro-Québec.
+    </p>
+    <p>
+      The chat assistant on the right will guide you through a few short questions. 
+      Feel free to ask it anything about the topics covered — it will answer and 
+      bring you back to the survey.
+    </p>
+    <p style="color: #888; font-size: 0.85rem;">
+      Your responses are anonymous and will be used for research purposes only.
+    </p>
+
+    <div class="lang-selector">
+      <label>Choose your language / Choisissez votre langue</label>
+      <select onchange="setLang(this.value)">
+        <option value="">-- Select --</option>
+        <option value="en">English</option>
+        <option value="fr">Français</option>
+      </select>
+    </div>
+  </div>
+
+  <df-messenger
+    id="df-messenger"
+    location="northamerica-northeast1"
+    project-id="public-policy-chatbot"
+    agent-id="20c6fb51-3364-4ecd-9fe2-73203361287a"
+    max-query-length="-1">
+    <df-messenger-chat
+      chat-title="SurveyBot">
+    </df-messenger-chat>
+  </df-messenger>
+
+  <script src="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/df-messenger.js"></script>
+  <script>
+    function setLang(lang) {
+      if (lang) {
+        document.getElementById('df-messenger').setAttribute('language-code', lang);
+      }
+    }
+  </script>
+
 </body>
 </html>
