@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>SurveyBot Demo</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<h1>Public Policy Survey Chatbot</h1>
+<p class="notice">
+  🚧 Demo mode — live chatbot interactions are disabled during testing.
+</p>
+
+<!-- Floating Chat Widget -->
+<div id="chat-widget">
+  <div id="chat-header">
+    SurveyBot
+    <span id="chat-close">✕</span>
+  </div>
+
+  <div id="chat-body"></div>
+
+  <div id="chat-footer">
+    <input
+      type="text"
+      placeholder="Type a message…"
+      disabled
+    />
+    <button disabled>Send</button>
+  </div>
+</div>
+
+<!-- Chat Bubble -->
+<div id="chat-bubble">💬</div>
+
+<script src="demo.js"></script>
+</body>
+</html>
