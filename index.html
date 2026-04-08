@@ -1,40 +1,3 @@
-<!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Public Policy Survey</title>
-  <link rel="stylesheet" href="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/themes/df-messenger-default.css">
-  <style>
-    df-messenger {
-      z-index: 999;
-      position: fixed;
-      --df-messenger-font-color: #000;
-      --df-messenger-font-family: Google Sans;
-      --df-messenger-chat-background: #f3f6fc;
-      --df-messenger-message-user-background: #d3e3fd;
-      --df-messenger-message-bot-background: #fff;
-      bottom: 0;
-      right: 0;
-      top: 0;
-      width: 350px;
-    }
-  </style>
-</head>
-<body>
-  <df-messenger
-    location="northamerica-northeast1"
-    project-id="public-policy-chatbot"
-    agent-id="20c6fb51-3364-4ecd-9fe2-73203361287a"
-    max-query-length="-1">
-    <df-messenger-chat
-      chat-title="SurveyBot">
-    </df-messenger-chat>
-  </df-messenger>
-  <script src="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/df-messenger.js"></script>
-</body>
-</html> -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -61,42 +24,69 @@
       max-width: calc(100% - 350px);
     }
 
-    #landing h1 {
-      font-size: 2rem;
-      color: #1a73e8;
-      margin-bottom: 16px;
+    .tag-row {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 24px;
     }
 
-    #landing p {
-      font-size: 1rem;
-      color: #444;
-      line-height: 1.7;
-      max-width: 520px;
-      margin-bottom: 12px;
-    }
-
-    #landing .tag {
+    .tag {
       display: inline-block;
       background: #d3e3fd;
       color: #1a73e8;
       padding: 4px 12px;
       border-radius: 20px;
       font-size: 0.85rem;
-      margin-bottom: 24px;
     }
 
-    #landing .lang-selector {
+    .bilingual {
+      display: flex;
+      gap: 48px;
+      margin-bottom: 16px;
+    }
+
+    .bilingual .en,
+    .bilingual .fr {
+      flex: 1;
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      color: #1a73e8;
+      line-height: 1.3;
+    }
+
+    p {
+      font-size: 0.95rem;
+      color: #444;
+      line-height: 1.7;
+    }
+
+    .divider {
+      width: 1px;
+      background: #ccc;
+      align-self: stretch;
+      margin: 0 -24px;
+    }
+
+    .note {
+      font-size: 0.85rem;
+      color: #888;
+    }
+
+    .lang-selector {
       margin-top: 32px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
     }
 
-    #landing .lang-selector label {
+    .lang-selector label {
       font-size: 0.9rem;
       color: #666;
-      margin-bottom: 8px;
-      display: block;
     }
 
-    #landing select {
+    select {
       padding: 10px 16px;
       font-size: 1rem;
       border-radius: 8px;
@@ -124,28 +114,75 @@
 <body>
 
   <div id="landing">
-    <h1>Public Policy Survey<br><span style="color: #555; font-size: 1.5rem;">Sondage sur les politiques publiques</span></h1>
 
-    <p>
-      Welcome! This survey collects your opinions on public services in Montreal, 
-      including the STM transit system and Hydro-Québec.
-      <br><br>
-      <span style="color: #555;">Bienvenue ! Ce sondage recueille vos opinions sur les services publics à Montréal, 
-      notamment le réseau STM et Hydro-Québec.</span>
-    </p>
+    <div class="bilingual" style="margin-bottom: 24px;">
+      <h1 class="en">Public Policy Survey</h1>
+      <div class="divider"></div>
+      <h1 class="fr">Sondage sur les politiques publiques</h1>
+    </div>
 
-    <p>
-      The chat assistant on the right will guide you through a few short questions. 
-      Feel free to ask it anything about the topics covered.
-      <br><br>
-      <span style="color: #555;">L'assistant à droite vous guidera à travers quelques courtes questions. 
-      N'hésitez pas à lui poser des questions sur les sujets abordés.</span>
-    </p>
+    <div class="bilingual">
+      <p class="en">
+        Welcome! This survey collects your opinions on public services in Montreal, 
+        including the STM transit system and Hydro-Québec.
+      </p>
+      <div class="divider"></div>
+      <p class="fr">
+        Bienvenue ! Ce sondage recueille vos opinions sur les services publics à Montréal, 
+        notamment le réseau STM et Hydro-Québec.
+      </p>
+    </div>
 
-    <p style="color: #888; font-size: 0.85rem;">
-      Your responses are anonymous and will be used for research purposes only.<br>
-      Vos réponses sont anonymes et seront utilisées à des fins de recherche uniquement.
-    </p>
+    <div class="bilingual" style="margin-top: 16px;">
+      <p class="en">
+        Civi, our chat assistant, will guide you through a few short questions. 
+        Feel free to ask Civi anything about the topics covered.
+      </p>
+      <div class="divider"></div>
+      <p class="fr">
+        Civi, notre assistant de discussion, vous guidera à travers quelques courtes questions. 
+        N'hésitez pas à lui poser des questions sur les sujets abordés.
+      </p>
+    </div>
+
+    <div class="bilingual" style="margin-top: 16px;">
+      <p class="en note">
+        Your responses are anonymous and will be used for research purposes only.
+      </p>
+      <div class="divider"></div>
+      <p class="fr note">
+        Vos réponses sont anonymes et seront utilisées à des fins de recherche uniquement.
+      </p>
+    </div>
+
+    <div style="display: flex; gap: 12px; margin: 24px 0; flex-wrap: wrap; justify-content: center;">
+      <span class="tag">🚇 STM Transit</span>
+      <span class="tag">⚡ Hydro-Québec</span>
+      <span class="tag">🏙️ Services publics / Public Services</span>
+    </div>
+
+    <div class="bilingual" style="margin-top: 24px;">
+      <div class="en">
+        <p style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; color: #1a73e8; margin-bottom: 8px;">About this project</p>
+        <p>
+          This survey is part of a research project exploring how AI can make community 
+          planning more inclusive. We want to hear from Montrealers about their experience 
+          with public services so that diverse voices, including those often left out, 
+          can meaningfully shape public decisions.
+        </p>
+      </div>
+      <div class="divider"></div>
+      <div class="fr">
+        <p style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; color: #1a73e8; margin-bottom: 8px;">À propos du projet</p>
+        <p>
+          Ce sondage s'inscrit dans un projet de recherche explorant comment l'IA peut rendre 
+          la planification communautaire plus inclusive. Nous souhaitons recueillir l'avis des 
+          Montréalais sur les services publics afin que des voix diverses, y compris celles 
+          souvent exclues, puissent influencer les décisions publiques.
+        </p>
+      </div>
+    </div>
+
   </div>
 
   <df-messenger
@@ -155,7 +192,7 @@
     agent-id="20c6fb51-3364-4ecd-9fe2-73203361287a"
     max-query-length="-1">
     <df-messenger-chat
-      chat-title="SurveyBot">
+      chat-title="Civi · · Survey | Sondage">
     </df-messenger-chat>
   </df-messenger>
 
