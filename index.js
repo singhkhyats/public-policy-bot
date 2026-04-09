@@ -207,7 +207,7 @@ app.post("/webhook", async (req, res) => {
             ? { targetFlow: targetPages[tag] }
             : { targetPage: targetPages[tag] }
         );
-    } else if (tag === "omments") {
+    } else if (tag === "comments") {
         ensureSession(sessionId);
         if (!isSkip) {
           sessions[sessionId].comments = rawText;
