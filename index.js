@@ -78,12 +78,12 @@ function looksLikeQuestion(text = "") {
 }
 
 const demographicHandlers = {
-  "Demographics 1": "age",
-  "Demographics 2": "gender",
-  "Demographics 3": "nationality",
-  "Demographics 4": "borough",
-  "Demographics 5": "education",
-  "Demographics 6": "occupation",
+  demographics1: "age",
+  demographics2: "gender",
+  demographics3: "nationality",
+  demographics4: "borough",
+  demographics5: "education",
+  demographics6: "occupation",
 };
 
 const prompts = {
@@ -100,11 +100,18 @@ const prompts = {
   
 };
 
-const pageURLBase = "projects/public-policy-chatbot/locations/northamerica-northeast1/agents/20c6fb51-3364-4ecd-9fe2-73203361287a/flows/f7e22aeb-3ff8-4798-a26c-77f345b9566c/pages";
+const demographicsURLBase = "projects/public-policy-chatbot/locations/northamerica-northeast1/agents/20c6fb51-3364-4ecd-9fe2-73203361287a/flows/a11e5871-3849-4231-9d82-cfd567b02ea7/pages";
+const questionsURLBase = "projects/public-policy-chatbot/locations/northamerica-northeast1/agents/20c6fb51-3364-4ecd-9fe2-73203361287a/flows/f7e22aeb-3ff8-4798-a26c-77f345b9566c/pages";
 const targetPages = {
-  q1_answer: `${pageURLBase}/8f9d1e08-1079-45d9-a516-9afb94da49e8`, // Page 2's URL
-  q2_answer: `${pageURLBase}/7f43a35c-abcc-4cbf-8cab-08bd1c1aa131`,
-  q3_answer: `${pageURLBase}/404db1b2-70a4-4b15-9780-5ed0db8cc13a` // Links to 'End Conversation' for now
+  demographics1: `${demographicsURLBase}/be036510-ff6e-4093-a107-9a1386bcf3d8`,
+  demographics2: `${demographicsURLBase}/2c7f535c-7bdb-497e-9ff8-3a4a3805fdfc`,
+  demographics3: `${demographicsURLBase}/5cf5140d-c686-4760-a322-315ecb387a92`,
+  demographics4: `${demographicsURLBase}/eb68ecfe-59dc-4af6-b0bc-71919002f571`,
+  demographics5: `${demographicsURLBase}/71179be0-55c9-4023-a366-6325bd1f2138`,
+  demographics6: "projects/public-policy-chatbot/locations/northamerica-northeast1/agents/20c6fb51-3364-4ecd-9fe2-73203361287a/flows/f7e22aeb-3ff8-4798-a26c-77f345b9566c",
+  q1_answer: `${questionsURLBase}/8f9d1e08-1079-45d9-a516-9afb94da49e8`, // Page 2's URL
+  q2_answer: `${questionsURLBase}/7f43a35c-abcc-4cbf-8cab-08bd1c1aa131`,
+  q3_answer: `${questionsURLBase}/404db1b2-70a4-4b15-9780-5ed0db8cc13a` // Links to 'End Conversation' for now
 };
 
 function handleQ(n, sessionId, rawText, isSkip) {
@@ -187,16 +194,18 @@ app.post("/webhook", async (req, res) => {
         return res.status(200).send("OK");
     } else if (tag in targetPages) {
         return await handleQuestionTag(tag, sessionId, params, rawText, lang, isSkip, res);
-    }
+    } else if (tag in demographicHandlers) {
+        const param = demographicHandlers[demographicKey];
+        ensureSession(sessionId);
 
-    const demographicKey = Object.keys(demographicHandlers).find(k => page.includes(k));
-    if (demographicKey) {
-      const param = demographicHandlers[demographicKey];
-      ensureSession(sessionId);
-      if (!isSkip) {
-        sessions[sessionId][param] = params[param];
-        console.log(`[${sessionId}] ${param}:`, sessions[sessionId][param]);
-      }
+        if (!isSkip) {
+          sessions[sessionId][param] = param === "age" ? params.age : rawText;
+          console.log(`[${sessionId}] ${param}:`, sessions[sessionId][param]);
+        }
+
+        return res.status(200).json({
+          targetPage: targetPages[tag]
+        });
     }
     
     return res.status(200).json({});
