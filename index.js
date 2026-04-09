@@ -192,8 +192,6 @@ app.post("/webhook", async (req, res) => {
         delete sessions[sessionId];
         console.log(`Session ${sessionId} deleted on user request`);
         return res.status(200).send("OK");
-    } else if (tag in targetPages) {
-        return await handleQuestionTag(tag, sessionId, params, rawText, lang, isSkip, res);
     } else if (tag in demographicHandlers) {
         const param = demographicHandlers[demographicKey];
         ensureSession(sessionId);
@@ -206,7 +204,9 @@ app.post("/webhook", async (req, res) => {
         return res.status(200).json({
           targetPage: targetPages[tag]
         });
-    }
+    } else if (tag in targetPages) {
+      return await handleQuestionTag(tag, sessionId, params, rawText, lang, isSkip, res);
+    } 
     
     return res.status(200).json({});
 
