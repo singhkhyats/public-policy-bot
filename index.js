@@ -15,7 +15,7 @@ app.use(express.json());
 const CSV_HEADERS = [
   "sessionID", "timestamp", "completion_status", "lang",
   "age", "gender", "nationality", "borough", "education", "occupation",
-  "q1_raw", "q2_raw", "q3_raw"
+  "q1_raw", "q2_raw", "q3_raw", "comments"
 ];
 
 async function getGeneratedResponse(question) {
@@ -111,7 +111,7 @@ const targetPages = {
   demographics6: "projects/public-policy-chatbot/locations/northamerica-northeast1/agents/20c6fb51-3364-4ecd-9fe2-73203361287a/flows/f7e22aeb-3ff8-4798-a26c-77f345b9566c",
   q1_answer: `${questionsURLBase}/8f9d1e08-1079-45d9-a516-9afb94da49e8`, // Page 2's URL
   q2_answer: `${questionsURLBase}/7f43a35c-abcc-4cbf-8cab-08bd1c1aa131`,
-  q3_answer: `${questionsURLBase}/404db1b2-70a4-4b15-9780-5ed0db8cc13a` // Links to 'End Conversation' for now
+  q3_answer: `${questionsURLBase}/a727282a-e530-4e46-a813-07da1a2f28ac`, // Links to 'Comments'
 };
 
 function handleQ(n, sessionId, rawText, isSkip) {
@@ -207,8 +207,17 @@ app.post("/webhook", async (req, res) => {
             ? { targetFlow: targetPages[tag] }
             : { targetPage: targetPages[tag] }
         );
+    } else if (tag === "open_comments") {
+        ensureSession(sessionId);
+        if (!isSkip) {
+          sessions[sessionId].comments = rawText;
+          console.log(`[${sessionId}] comments:`, rawText);
+        }
+        return res.status(200).json({
+          targetPage: `${questionsURLBase}/404db1b2-70a4-4b15-9780-5ed0db8cc13a` // Links to 'End Conversation'
+        });
     } else if (tag in targetPages) {
-      return await handleQuestionTag(tag, sessionId, params, rawText, lang, isSkip, res);
+        return await handleQuestionTag(tag, sessionId, params, rawText, lang, isSkip, res);
     } 
     
     return res.status(200).json({});
@@ -261,7 +270,7 @@ app.get("/responses", (req, res) => {
     .meta { font-size: 0.82rem; color: #888; margin-bottom: 28px; }
     .table-wrapper { background: white; border-radius: 12px; overflow-x: auto; box-shadow: 0 1px 3px rgba(0,0,0,0.07), 0 4px 16px rgba(0,0,0,0.04); }
     table { border-collapse: collapse; width: 100%; min-width: 900px; }
-    thead tr { border-bottom: 1.5px solid #e8eaf0; }
+    thead tr { border-bottom: 1.5px solid #7fbefd; }
     th { padding: 14px 20px; text-align: left; font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: #888; background: #fafbfd; border-right: 1px solid #f0f1f5; white-space: nowrap; }
     th:last-child { border-right: none; }
     td { padding: 13px 20px; font-size: 0.85rem; color: #444; border-right: 1px solid #f0f1f5; border-bottom: 1px solid #f5f6f9; vertical-align: top; max-width: 200px; }
