@@ -107,13 +107,15 @@ const targetPages = {
   q3_answer: `${pageURLBase}/404db1b2-70a4-4b15-9780-5ed0db8cc13a` // Links to 'End Conversation' for now
 };
 
-function handleQ(n, sessionId, rawText) {
+function handleQ(n, sessionId, rawText, isSkip) {
   ensureSession(sessionId);
-  sessions[sessionId][`q${n}_raw`] = rawText;
-  console.log(`[${sessionId}] Q${n} Raw:`, rawText);
+  if (!isSkip) {
+    sessions[sessionId][`q${n}_raw`] = rawText;
+    console.log(`[${sessionId}] Q${n} Raw:`, rawText);
+  }
 }
 
-async function handleQuestionTag(tag, sessionId, params, rawText, lang, res) {
+async function handleQuestionTag(tag, sessionId, params, rawText, lang, isSkip, res) {
   if (!(tag in targetPages)) return false;
 
   const answeredParam = `${tag}ed`;
@@ -162,6 +164,8 @@ app.post("/webhook", async (req, res) => {
     const page = req.body.pageInfo?.displayName || "UNKNOWN_PAGE";
     const tag = req.body.fulfillmentInfo?.tag || "";
     const rawText = req.body.text || "";
+    const intentName = req.body.intentInfo?.displayName || "";
+    const isSkip = intentName === "Skip Question";
     const lang = req.body.languageCode === "fr" ? "fr" : "en";
     ensureSession(sessionId);
     sessions[sessionId].lang = lang;
@@ -180,15 +184,17 @@ app.post("/webhook", async (req, res) => {
         console.log(`Session ${sessionId} deleted on user request`);
         return res.status(200).send("OK");
     } else if (tag in targetPages) {
-        return await handleQuestionTag(tag, sessionId, params, rawText, lang, res);
+        return await handleQuestionTag(tag, sessionId, params, rawText, lang, isSkip, res);
     }
 
     const demographicKey = Object.keys(demographicHandlers).find(k => page.includes(k));
     if (demographicKey) {
       const param = demographicHandlers[demographicKey];
       ensureSession(sessionId);
-      sessions[sessionId][param] = params[param];
-      console.log(`[${sessionId}] ${param}:`, params[param]);
+      if (!isSkip) {
+        sessions[sessionId][param] = params[param];
+        console.log(`[${sessionId}] ${param}:`, sessions[sessionId][param]);
+      }
     }
     
     return res.status(200).json({});
@@ -252,6 +258,16 @@ app.listen(8080, () => {
 function saveSessionToCSV(sessionId, status) {
   const sessionData = sessions[sessionId];
   if (!sessionData) return;
+
+  // skip if no meaningful data was collected
+  const hasData = Object.entries(sessionData).some(
+    ([key, val]) => key !== "timestamp" && val !== "" && val !== null && val !== undefined
+  );
+  if (!hasData) {
+    delete sessions[sessionId];
+    return;
+  }
+
   sessionData.completion_status = status;
 
   // If file doesn't exist, write headers first
