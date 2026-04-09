@@ -226,43 +226,67 @@ app.get("/responses", (req, res) => {
   }
 
   const csv = fs.readFileSync(csvFilePath, "utf8");
-  const rows = csv.trim().split("\n").map(row => {
-    return row.match(/(".*?"|[^,]+)(?=,|$)/g).map(cell => cell.replace(/^"|"$/g, "").replace(/""/g, '"'));
-  });
+  const rows = csv.trim().split("\n").map(row =>
+    row.match(/(".*?"|[^,]+)(?=,|$)/g).map(cell =>
+      cell.replace(/^"|"$/g, "").replace(/""/g, '"')
+    )
+  );
 
   const headers = rows[0];
   const data = rows.slice(1);
 
-  const tableRows = data.map(row => `
-    <tr>${row.map(cell => `<td>${cell}</td>`).join("")}</tr>
-  `).join("");
+  const headerHTML = headers.map(h => `<th>${h}</th>`).join("");
 
-  res.send(`
-    <!DOCTYPE html>
-    <html>
-    <head>
-      <title>Survey Responses</title>
-      <style>
-        body { font-family: Google Sans, sans-serif; padding: 32px; background: #f3f6fc; }
-        h1 { color: #1a73e8; margin-bottom: 24px; }
-        table { border-collapse: collapse; width: 100%; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
-        th { background: #1a73e8; color: white; padding: 12px 16px; text-align: left; font-size: 0.85rem; }
-        td { padding: 10px 16px; border-bottom: 1px solid #e0e0e0; font-size: 0.85rem; color: #333; }
-        tr:last-child td { border-bottom: none; }
-        tr:hover td { background: #f3f6fc; }
-        .count { color: #666; font-size: 0.9rem; margin-bottom: 16px; }
-      </style>
-    </head>
-    <body>
-      <h1>Survey Responses</h1>
-      <p class="count">${data.length} response${data.length !== 1 ? "s" : ""} collected</p>
-      <table>
-        <thead><tr>${headers.map(h => `<th>${h}</th>`).join("")}</tr></thead>
-        <tbody>${tableRows}</tbody>
-      </table>
-    </body>
-    </html>
-  `);
+  const rowsHTML = data.map(row => {
+    const cells = headers.map((h, i) => {
+      const val = row[i] || "";
+      if (h === "completion_status") {
+        return `<td><span class="badge ${val}">${val}</span></td>`;
+      }
+      return `<td>${val || '<span class="empty">—</span>'}</td>`;
+    });
+    return `<tr>${cells.join("")}</tr>`;
+  }).join("");
+
+  const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Survey Responses</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Google Sans, sans-serif; background: #f8f9fc; padding: 48px; color: #333; }
+    h1 { font-size: 1.5rem; font-weight: 600; color: #1a1a2e; margin-bottom: 6px; letter-spacing: -0.3px; }
+    .meta { font-size: 0.82rem; color: #888; margin-bottom: 28px; }
+    .table-wrapper { background: white; border-radius: 12px; overflow-x: auto; box-shadow: 0 1px 3px rgba(0,0,0,0.07), 0 4px 16px rgba(0,0,0,0.04); }
+    table { border-collapse: collapse; width: 100%; min-width: 900px; }
+    thead tr { border-bottom: 1.5px solid #e8eaf0; }
+    th { padding: 14px 20px; text-align: left; font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: #888; background: #fafbfd; border-right: 1px solid #f0f1f5; white-space: nowrap; }
+    th:last-child { border-right: none; }
+    td { padding: 13px 20px; font-size: 0.85rem; color: #444; border-right: 1px solid #f0f1f5; border-bottom: 1px solid #f5f6f9; vertical-align: top; max-width: 200px; }
+    td:last-child { border-right: none; }
+    tr:last-child td { border-bottom: none; }
+    tbody tr:hover td { background: #fafbff; }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 0.75rem; font-weight: 500; }
+    .badge.complete { background: #e6f4ea; color: #2d7a3a; }
+    .badge.partial { background: #fff3e0; color: #b36200; }
+    .empty { color: #ccc; font-style: italic; font-size: 0.8rem; }
+  </style>
+</head>
+<body>
+  <h1>Survey Responses</h1>
+  <p class="meta">${data.length} response${data.length !== 1 ? "s" : ""} collected</p>
+  <div class="table-wrapper">
+    <table>
+      <thead><tr>${headerHTML}</tr></thead>
+      <tbody>${rowsHTML}</tbody>
+    </table>
+  </div>
+</body>
+</html>`;
+
+  res.send(html);
 });
 
 app.listen(8080, () => {
