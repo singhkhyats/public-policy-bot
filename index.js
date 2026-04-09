@@ -13,9 +13,9 @@ const app = express();
 app.use(express.json());
 
 const CSV_HEADERS = [
-  "sessionID", "timestamp", "completion_status", "lang",
+  "sessionID", "timestamp", "completion_status",
   "age", "gender", "nationality", "borough", "education", "occupation",
-  "q1_raw", "q2_raw", "q3_raw", "comments"
+  "STM_usage", "STM_reliability", "STM_affordability", "Hydro_sustainability","Hydro_equity", "comments"
 ];
 
 async function getGeneratedResponse(question) {
@@ -91,11 +91,15 @@ const prompts = {
     Q1: "How often do you use STM public transit in a typical week?",
     Q2: "How satisfied are you with the reliability of STM service?",
     Q3: "How affordable do you find STM fares relative to the service you receive?",
+    Q4: "How informed do you feel about Hydro-Québec's energy transition and sustainability initiatives?",
+    Q5: "Do you believe Hydro-Québec's rate structures are fair across different income levels?"
   },
   fr: {
     Q1: "À quelle fréquence utilisez-vous le transport en commun de la STM pendant une semaine typique?",
     Q2: "Quel est votre niveau de satisfaction concernant la fiabilité du service STM?",
     Q3: "Trouvez-vous que les tarifs de la STM sont abordables compte tenu du service offert?",
+    Q4: "Dans quelle mesure vous sentez-vous informé(e) des initiatives de transition énergétique et de développement durable d'Hydro-Québec?",
+    Q5: "Croyez-vous que les structures tarifaires d'Hydro-Québec sont équitables pour les différents niveaux de revenus?"
   }
   
 };
@@ -111,7 +115,9 @@ const targetPages = {
   demographics6: "projects/public-policy-chatbot/locations/northamerica-northeast1/agents/20c6fb51-3364-4ecd-9fe2-73203361287a/flows/f7e22aeb-3ff8-4798-a26c-77f345b9566c",
   q1_answer: `${questionsURLBase}/8f9d1e08-1079-45d9-a516-9afb94da49e8`, // Page 2's URL
   q2_answer: `${questionsURLBase}/7f43a35c-abcc-4cbf-8cab-08bd1c1aa131`,
-  q3_answer: `${questionsURLBase}/a727282a-e530-4e46-a813-07da1a2f28ac`, // Links to 'Comments'
+  q3_answer: `${questionsURLBase}/3d1565fb-6b5e-4150-ad73-02b16c220723`, 
+  q4_answer: `${questionsURLBase}/8f794b33-4554-40d4-acf4-1641e1de7899`, 
+  q5_answer: `${questionsURLBase}/a727282a-e530-4e46-a813-07da1a2f28ac`, // Links to 'Comments'
 };
 
 function handleQ(n, sessionId, rawText, isSkip) {
@@ -270,8 +276,8 @@ app.get("/responses", (req, res) => {
     .meta { font-size: 0.82rem; color: #888; margin-bottom: 28px; }
     .table-wrapper { background: white; border-radius: 12px; overflow-x: auto; box-shadow: 0 1px 3px rgba(0,0,0,0.07), 0 4px 16px rgba(0,0,0,0.04); }
     table { border-collapse: collapse; width: 100%; min-width: 900px; }
-    thead tr { border-bottom: 1.5px solid #7fbefd; }
-    th { padding: 14px 20px; text-align: left; font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: #888; background: #fafbfd; border-right: 1px solid #f0f1f5; white-space: nowrap; }
+    thead tr { border-bottom: 1.5px solid #e8eaf0; }
+    th { padding: 14px 20px; text-align: left; font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: #1a1a2e; background: #7fbefd; border-right: 1px solid #5aaef0; white-space: nowrap; }
     th:last-child { border-right: none; }
     td { padding: 13px 20px; font-size: 0.85rem; color: #444; border-right: 1px solid #f0f1f5; border-bottom: 1px solid #f5f6f9; vertical-align: top; max-width: 200px; }
     td:last-child { border-right: none; }
