@@ -166,6 +166,8 @@ app.post("/webhook", async (req, res) => {
     const rawText = req.body.text || "";
     const intentName = req.body.intentInfo?.displayName || "";
     const isSkip = intentName === "Skip Question";
+    console.log("intentName:", intentName);
+    console.log("isSkip:", isSkip);
     const lang = req.body.languageCode === "fr" ? "fr" : "en";
     ensureSession(sessionId);
     sessions[sessionId].lang = lang;
