@@ -201,9 +201,12 @@ app.post("/webhook", async (req, res) => {
           console.log(`[${sessionId}] ${param}:`, sessions[sessionId][param]);
         }
 
-        return res.status(200).json({
-          targetPage: targetPages[tag]
-        });
+        const isLastDemographic = tag === "demographics6";
+        return res.status(200).json(
+          isLastDemographic
+            ? { targetFlow: targetPages[tag] }
+            : { targetPage: targetPages[tag] }
+        );
     } else if (tag in targetPages) {
       return await handleQuestionTag(tag, sessionId, params, rawText, lang, isSkip, res);
     } 
