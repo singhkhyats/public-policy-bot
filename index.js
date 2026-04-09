@@ -14,7 +14,7 @@ app.use(express.json());
 
 const CSV_HEADERS = [
   "sessionID", "timestamp", "completion_status", "lang",
-  "age", "gender", "nationality",
+  "age", "gender", "nationality", "borough", "education", "occupation",
   "q1_raw", "q2_raw", "q3_raw"
 ];
 
@@ -76,6 +76,15 @@ function looksLikeQuestion(text = "") {
   
   return starters.some(w => t.startsWith(w + " "));
 }
+
+const demographicHandlers = {
+  "Demographics 1": "age",
+  "Demographics 2": "gender",
+  "Demographics 3": "nationality",
+  "Demographics 4": "borough",
+  "Demographics 5": "education",
+  "Demographics 6": "occupation",
+};
 
 const prompts = {
   en: {
@@ -174,14 +183,12 @@ app.post("/webhook", async (req, res) => {
         return await handleQuestionTag(tag, sessionId, params, rawText, lang, res);
     }
 
-    if (page.includes("Demographics 1")) {
-      handleAge(sessionId, params);
-    } else if (page.includes("Demographics 2")) {
-      handleGender(sessionId, params);
-    } else if (page.includes("Demographics 3")) {
-      handleNationality(sessionId, params);
-    } else {
-      console.log("No matching handler for page:", page);
+    const demographicKey = Object.keys(demographicHandlers).find(k => page.includes(k));
+    if (demographicKey) {
+      const param = demographicHandlers[demographicKey];
+      ensureSession(sessionId);
+      sessions[sessionId][param] = params[param];
+      console.log(`[${sessionId}] ${param}:`, params[param]);
     }
     
     return res.status(200).json({});
@@ -225,22 +232,4 @@ function ensureSession(sessionId) {
   if (!sessions[sessionId]) {
     sessions[sessionId] = { timestamp: new Date().toISOString() };
   }
-}
-
-function handleAge(sessionId, params) {
-  ensureSession(sessionId);
-  sessions[sessionId].age = params.age;
-  console.log("Age:", params.age);
-}
-
-function handleGender(sessionId, params) {
-  ensureSession(sessionId);
-  sessions[sessionId].gender = params.gender;
-  console.log("Gender:", params.gender);
-}
-
-function handleNationality(sessionId, params) {
-  ensureSession(sessionId);
-  sessions[sessionId].nationality = params.nationality;
-  console.log("Nationality:", params.nationality);
 }
