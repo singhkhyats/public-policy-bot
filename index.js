@@ -193,7 +193,7 @@ app.post("/webhook", async (req, res) => {
         console.log(`Session ${sessionId} deleted on user request`);
         return res.status(200).send("OK");
     } else if (tag in demographicHandlers) {
-        const param = demographicHandlers[demographicKey];
+        const param = demographicHandlers[tag];
         ensureSession(sessionId);
 
         if (!isSkip) {
