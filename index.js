@@ -200,6 +200,15 @@ app.post("/webhook", async (req, res) => {
 
 });
 
+app.get("/responses", (req, res) => {
+  if (!fs.existsSync(csvFilePath)) {
+    return res.status(404).send("No responses yet");
+  }
+  const csv = fs.readFileSync(csvFilePath, "utf8");
+  res.setHeader("Content-Type", "text/plain");
+  res.send(csv);
+});
+
 app.listen(8080, () => {
   console.log("Webhook listening on port 8080");
 });
