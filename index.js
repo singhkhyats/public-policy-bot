@@ -77,6 +77,14 @@ function looksLikeQuestion(text = "") {
   return starters.some(w => t.startsWith(w + " "));
 }
 
+const qFields = {
+  1: "STM_usage",
+  2: "STM_reliability", 
+  3: "STM_affordability",
+  4: "Hydro_sustainability",
+  5: "Hydro_equity"
+};
+
 const demographicHandlers = {
   demographics1: "age",
   demographics2: "gender",
@@ -123,8 +131,9 @@ const targetPages = {
 function handleQ(n, sessionId, rawText, isSkip) {
   ensureSession(sessionId);
   if (!isSkip) {
-    sessions[sessionId][`q${n}_raw`] = rawText;
-    console.log(`[${sessionId}] Q${n} Raw:`, rawText);
+    const field = qFields[n];
+    sessions[sessionId][field] = rawText;
+    console.log(`[${sessionId}] ${field}:`, rawText);
   }
 }
 
