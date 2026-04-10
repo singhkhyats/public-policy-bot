@@ -71,9 +71,18 @@ function looksLikeQuestion(text = "") {
 
   if (t.includes("?")) return true;
 
-  const starters = ["what", "why", "how", "where", "who", "when", "can", "is", "are", "explain", "describe",
-    "qu'est", "que", "quoi", "pourquoi", "comment", "où", "qui", "quand", "est-ce", "expliquez"];
-  
+  const starters = [
+    // English
+    "what is", "what are", "what does", "what do", "what's", "why is", "why are", "why does", "why do",
+    "how does", "how do", "how is", "how are", "how can", "where is", "where are", "where do", "where can",
+    "who is", "who are", "who does", "when is", "when are", "when does", "when do",
+    "can you", "can i", "could you", "explain ", "describe ", "tell me",
+    // French
+    "qu'est-ce", "qu'est ce", "que ", "qui ", "pourquoi ", "comment ", "comment est",
+    "où est", "où sont", "où se", "quand est", "quand sont", "est-ce que", "est-ce qu",
+    "pouvez-vous", "pouvez vous", "expliquez ", "décrivez ", "c'est quoi", "parlez moi", "dites moi"
+  ];
+
   return starters.some(w => t.startsWith(w + " "));
 }
 
